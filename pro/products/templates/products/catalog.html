@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <title>Title</title>
+    </head>
+    <!-- <body>
+        {% for i in products %}
+        <p> {{ i.name }} {{ i.price }} {{i.description}}</p>
+        {% endfor %}
+    </body> -->
+    <div class="col-lg-9">
+    <div class = "row">
+        {% for i in products %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <a href="#">
+                    <img style="width:40px" class="card-img-top"
+                        src="{% static 'vendor/img/products/Black-Nike-Heritage-backpack.png' %}"
+                        alt="">
+                </a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="#">{{i.name}}</a>
+                    </h4>
+                    <h5>{{i.price}} руб.</h5>
+                    <p class="card-text">{{i.description}}</p>
+                </div>
+                <div class="card-footer text-center">
+                    <button type="button" class="btn btn-outline-success">Отправить в корзину</button>
+                </div>
+            </div>
+        {%endfor%}
+    </div>
+    </div>
+
+    </html>
