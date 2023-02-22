@@ -1,17 +1,18 @@
-# Create your views here.
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponseRedirect
+from .models import Product, ProductCategory, Basket
+import sys
+sys.path.append('C:/Users/ajsha/Desktop/backend/pro/users')
+from users .models import User
+
 
 # Create your views here.
 
 def catalog(request):
     context = {
-        'products' : [
-            # {'name': 'худи черного цвета', 'price': '1950'},
-            # {'name': 'худи черного цвета', 'price': '1950'}
-            {'name': 'Худи черного цвета с монограммами adidas Originals', 'price': '609000', 'description': 'Мягкая ткань для свитшотов. Стиль и комфорт – это образ жизни.'},
-            {'name': 'Синяя куртка The North Face', 'price': '23 725', 'description': 'Гладкая ткань. Водонепроницаемое покрытие. Легкий и теплый пуховый наполнитель.'},
-            {'name': 'Коричневый спортивный oversized-топ ASOS DESIGN', 'price': '3 390', 'description': 'Материал с плюшевой текстурой. Удобный и мягкий.'},
-        ]
+        'title' : 'StoreApp',
+        'products' : Product.objects.all(),
+        'categories' : ProductCategory.objects.all()
+
     }
     return render(request, 'products/catalog.html', context)
 
@@ -23,9 +24,20 @@ def index(request):
     }
     return render(request, 'products/index.html', context)
 
-# def catalog(request):
-#     context = {
-#         'title' : 'Catalog',
+def basket_add(request, product_id):
+    product = Product.objects.get(id=product_id)
+    baskets = Basket.objects.filter(user=request.user, products=product)
 
-#     }
-#     return render(request, 'products/catalog.html', context)
+    if not baskets.exists():
+        Basket.objects.create(user=request.user, products=product, quantity=1)
+    else:
+        basket = baskets.first()
+        basket.quantity += 1
+        basket.save()
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+def basket_remove(request, basket_id):
+    basket = Basket.objects.get(id=basket_id)
+    basket.delete()
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
