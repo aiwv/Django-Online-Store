@@ -73,7 +73,7 @@
             <h1 class="my-4">Store</h1>
             <div class="list-group">
                 {% for category in categories %}
-                <a href = "#" class = "list-group-item">{{ category.name }}</a>
+                <a href = "{% url 'products:category' category.id %}" class = "list-group-item">{{ category.name }}</a>
                 {% endfor %} 
             </div>
 
@@ -135,20 +135,27 @@
 
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    {% if products.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
+                        <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
                     </li>
+                    {% endif %}
+
+                    {% for i in max_pages %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                    </li>
+                    {% endfor %}
+
+                    {% if products.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
                 </ul>
-            </nav>
+            </nav> 
 
         </div>
-
     </div>
 
 </div>

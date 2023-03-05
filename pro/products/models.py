@@ -2,6 +2,9 @@ from django.db import models
 import sys
 sys.path.append('C:/Users/ajsha/Desktop/backend/pro/users')
 from users .models import User
+from django.core.paginator import Paginator
+from django.shortcuts import render
+
 
 class ProductCategory(models.Model):
     name = models.CharField(max_length=128, unique=True)
@@ -20,6 +23,15 @@ class Product(models.Model):
     image = models.ImageField(upload_to='prroducts_image')
     category = models.ForeignKey(to=ProductCategory, on_delete=models.CASCADE)
 
+    # def listing(request):
+    #     list = Product.objects.all()
+    #     paginator = Paginator(list, 1)
+
+    #     page_number = request.GET.get('page')
+    #     page_obj = paginator.get_page(page_number)
+    #     return render(request, 'products/catalog.html', {'page_obj': page_obj})
+    
+
     def __str__(self):
         return self.name 
     def __repr__(self) -> str:
@@ -34,3 +46,6 @@ class Basket(models.Model) :
 
     def __str__(self) :
         return f"Корзина товаров для {self.user.username}"
+
+    def sum(self):
+        return self.products.price * self.quantity
